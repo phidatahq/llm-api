@@ -7,6 +7,7 @@ from phi.aws.resources import AwsResources
 from phi.aws.resource.rds.db_instance import DbInstance
 from phi.aws.resource.rds.db_subnet_group import DbSubnetGroup
 from phi.aws.resource.reference import AwsReference
+from phi.aws.resource.s3.bucket import S3Bucket
 from phi.aws.resource.secret.manager import SecretsManager
 from phi.docker.resources import DockerResources
 from phi.docker.resource.image import DockerImage
@@ -33,6 +34,15 @@ prd_image = DockerImage(
     pull=ws_settings.force_pull_images,
     push_image=ws_settings.push_images,
     skip_docker_cache=ws_settings.skip_image_cache,
+)
+
+# -*- S3 bucket for production data (set enabled=True when needed)
+prd_bucket = S3Bucket(
+    name=f"{ws_settings.prd_key}-data",
+    enabled=False,
+    acl="private",
+    skip_delete=skip_delete,
+    save_output=save_output,
 )
 
 # -*- Secrets for production application
@@ -77,8 +87,8 @@ prd_lb_sg = SecurityGroup(
     skip_delete=skip_delete,
     save_output=save_output,
 )
-# -*- Security Group for the api
-prd_api_sg = SecurityGroup(
+# -*- Security Group for the application
+prd_sg = SecurityGroup(
     name=f"{ws_settings.prd_key}-security-group",
     enabled=ws_settings.prd_api_enabled,
     group="api",
@@ -105,10 +115,10 @@ prd_db_sg = SecurityGroup(
         InboundRule(
             description="Allow traffic from the FastAPI server to the database",
             port=prd_db_port,
-            source_security_group_id=AwsReference(prd_api_sg.get_security_group_id),
+            source_security_group_id=AwsReference(prd_sg.get_security_group_id),
         ),
     ],
-    depends_on=[prd_api_sg],
+    depends_on=[prd_sg],
     skip_delete=skip_delete,
     save_output=save_output,
 )
@@ -132,7 +142,7 @@ prd_db = DbInstance(
     db_name="prd",
     engine=db_engine,
     port=prd_db_port,
-    engine_version="15.4-R2",
+    engine_version="15.4",
     allocated_storage=64,
     # NOTE: For production, use a larger instance type.
     # Last checked price: $0.0650 hourly = ~$50 per month
@@ -176,7 +186,6 @@ container_env = {
 }
 
 # -*- FastApi running on ECS
-launch_type = "FARGATE"
 prd_fastapi = FastApi(
     name=ws_settings.prd_key,
     enabled=ws_settings.prd_api_enabled,
@@ -190,7 +199,7 @@ prd_fastapi = FastApi(
     ecs_cluster=prd_ecs_cluster,
     aws_secrets=[prd_secret],
     subnets=ws_settings.subnet_ids,
-    security_groups=[prd_api_sg],
+    security_groups=[prd_sg],
     # To enable HTTPS, create an ACM certificate and add the ARN below:
     # load_balancer_enable_https=True,
     # load_balancer_certificate_arn="LOAD_BALANCER_CERTIFICATE_ARN",
@@ -219,12 +228,13 @@ prd_aws_config = AwsResources(
     env=ws_settings.prd_env,
     apps=[prd_fastapi],
     resources=(
-        prd_db,
-        prd_db_subnet_group,
+        prd_lb_sg,
+        prd_sg,
+        prd_db_sg,
         prd_secret,
         prd_db_secret,
-        prd_lb_sg,
-        prd_api_sg,
-        prd_db_sg,
+        prd_db_subnet_group,
+        prd_db,
+        prd_bucket,
     ),
 )

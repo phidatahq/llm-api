@@ -42,7 +42,7 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.ECR_REPO }}/api:dev
+          tags: ${{ env.ECR_REPO }}/llm-api:dev
 
   build-prd-image:
     runs-on: ubuntu-latest
@@ -71,4 +71,4 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.ECR_REPO }}/api:prd
+          tags: ${{ env.ECR_REPO }}/llm-api:prd

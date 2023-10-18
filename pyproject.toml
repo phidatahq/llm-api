@@ -1,5 +1,5 @@
 [project]
-name = "api"
+name = "llm-api"
 version = "0.1.0"
 requires-python = ">3.7"
 readme = "README.md"
@@ -30,7 +30,7 @@ dependencies = [
   # Linting
   "ruff",
   # Phidata
-  "phidata==2.0.18",
+  "phidata==2.0.19",
 ]
 
 [build-system]

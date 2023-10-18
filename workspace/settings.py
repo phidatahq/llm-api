@@ -8,7 +8,7 @@ from phi.workspace.settings import WorkspaceSettings
 #
 ws_settings = WorkspaceSettings(
     # Workspace name: used for naming cloud resources
-    ws_name="api",
+    ws_name="llm-api",
     # Path to the workspace root
     ws_root=Path(__file__).parent.parent.resolve(),
     # -*- Development env settings

@@ -30,7 +30,7 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}/api:dev
+          tags: ${{ secrets.DOCKERHUB_REPO }}/llm-api:dev
 
   build-prd-image:
     runs-on: ubuntu-latest
@@ -54,4 +54,4 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}/api:prd
+          tags: ${{ secrets.DOCKERHUB_REPO }}/llm-api:prd
