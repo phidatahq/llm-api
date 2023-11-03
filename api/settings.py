@@ -6,7 +6,7 @@ from pydantic_core.core_schema import FieldValidationInfo
 
 
 class ApiSettings(BaseSettings):
-    """Api settings that can be derived using environment variables.
+    """Api settings that can be set using environment variables.
 
     Reference: https://pydantic-docs.helpmanual.io/usage/settings/
     """
@@ -15,11 +15,11 @@ class ApiSettings(BaseSettings):
     title: str = "llm-api"
     version: str = "1.0"
 
-    # Runtime env derived using the `runtime_env` environment variable.
-    # Valid values are "dev", "stg", "prd"
+    # Api runtime_env derived from the `runtime_env` environment variable.
+    # Valid values include "dev", "stg", "prd"
     runtime_env: str = "dev"
 
-    # Set to False to disable docs server at /docs and /redoc
+    # Set to False to disable docs at /docs and /redoc
     docs_enabled: bool = True
 
     # Cors origin list to allow requests from.

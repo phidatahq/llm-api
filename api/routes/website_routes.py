@@ -166,9 +166,7 @@ def get_conversation_ids(body: GetAllConversationIdsRequest):
     """Return all conversation_ids for a user"""
 
     logger.debug(f"GetAllConversationIdsRequest: {body}")
-    return website_conversation_storage.get_all_conversation_ids(
-        user_name=body.user_name
-    )
+    return website_conversation_storage.get_all_conversation_ids(user_name=body.user_name)
 
 
 class RenameConversationRequest(BaseModel):
@@ -229,7 +227,7 @@ class EndConversationRequest(BaseModel):
     conversation_type: ConversationType = "RAG"
 
 
-@website_router.post("/conversation/end", response_model=Optional[ConversationRow])
+@website_router.post("/end", response_model=Optional[ConversationRow])
 def end_conversation(body: EndConversationRequest):
     """End a conversation"""
 

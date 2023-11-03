@@ -27,9 +27,7 @@ def get_conversation(
     """Get a conversation using the conversation_id"""
 
     if conversation_type == "RAG":
-        return get_pdf_rag_conversation(
-            conversation_id=conversation_id, user_name=user_name, debug_mode=True
-        )
+        return get_pdf_rag_conversation(conversation_id=conversation_id, user_name=user_name, debug_mode=True)
     elif conversation_type == "AUTO":
         return get_pdf_auto_conversation(
             conversation_id=conversation_id, user_name=user_name, debug_mode=True
@@ -93,7 +91,7 @@ class ChatRequest(BaseModel):
 
 @pdf_router.post("/chat")
 def chat(body: ChatRequest):
-    """Send a message to the LLM and return the response"""
+    """Send a message to the PDF LLM and return the response"""
 
     logger.debug(f"ChatRequest: {body}")
     conversation: Conversation = get_conversation(

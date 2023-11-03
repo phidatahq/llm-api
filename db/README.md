@@ -9,24 +9,22 @@ Steps to migrate the database using alembic:
 
 > Note: Set Env Var `MIGRATE_DB = True` to run the database migration in the entrypoint script at container startup.
 
+Checkout the docs on [adding database tables](https://docs.phidata.com/day-2/database-tables).
+
 ## Creat a database revision using alembic
 
-SSH into the dev container and run the alembic command to create a database migration.
+Run the alembic command to create a database migration in the dev container:
 
 ```bash
-docker exec -it api-dev zsh
-
-alembic -c db/alembic.ini revision --autogenerate -m "Initialize DB"
+docker exec -it llm-api-dev alembic -c db/alembic.ini revision --autogenerate -m "Initialize DB"
 ```
 
 ## Migrate development database
 
-SSH into the dev container and run the alembic command to migrate the database.
+Run the alembic command to migrate the dev database:
 
 ```bash
-docker exec -it api-dev zsh
-
-alembic -c db/alembic.ini upgrade head
+docker exec -it llm-api-dev alembic -c db/alembic.ini upgrade head
 ```
 
 ## Migrate production database
@@ -35,19 +33,15 @@ alembic -c db/alembic.ini upgrade head
 2. **OR** you can SSH into the production container to run the migration manually
 
 ```bash
-ECS_CLUSTER=api-prd-cluster
-TASK_ARN=$(aws ecs list-tasks --cluster api-prd-cluster --query "taskArns[0]" --output text)
-CONTAINER_NAME=llm-prd-api
+ECS_CLUSTER=llm-api-prd-cluster
+TASK_ARN=$(aws ecs list-tasks --cluster llm-api-prd-cluster --query "taskArns[0]" --output text)
+CONTAINER_NAME=llm-api-prd
 
 aws ecs execute-command --cluster $ECS_CLUSTER \
     --task $TASK_ARN \
     --container $CONTAINER_NAME \
     --interactive \
-    --command "zsh"
-```
-
-```bash
-alembic -c db/alembic.ini upgrade head
+    --command "alembic -c db/alembic.ini upgrade head"
 ```
 
 ---
@@ -57,7 +51,7 @@ alembic -c db/alembic.ini upgrade head
 > This has already been run and is described here for completeness
 
 ```bash
-docker exec -it api-dev zsh
+docker exec -it llm-api-dev zsh
 
 cd db
 alembic init migrations
