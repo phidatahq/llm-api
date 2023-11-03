@@ -12,7 +12,6 @@ anyio==3.7.1
 async-timeout==4.0.3
 attrs==23.1.0
 beautifulsoup4==4.12.2
-black==23.10.1
 boto3==1.28.77
 botocore==1.31.77
 certifi==2023.7.22
@@ -39,10 +38,8 @@ mypy-extensions==1.0.0
 numpy==1.26.1
 openai==0.28.1
 packaging==23.2
-pathspec==0.11.2
 pgvector==0.2.3
-phidata==2.0.25
-platformdirs==3.11.0
+phidata==2.0.27
 pluggy==1.3.0
 psycopg[binary]==3.1.12
 psycopg-binary==3.1.12
