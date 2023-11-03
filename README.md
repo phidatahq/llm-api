@@ -9,7 +9,7 @@ This repo contains the code for running an LLM Api in 2 environments:
 
 1. Clone the git repo
 
-> in the `llm-api` dir:
+> from the `llm-api` dir:
 
 2. Create + activate a virtual env:
 
@@ -64,9 +64,7 @@ phi ws up
 
 Open [localhost:8000/docs](http://localhost:8000/docs) to view the FastApi docs.
 
-### Shut down workspace
-
-Shut down workspace using:
+4. Stop the workspace using:
 
 ```sh
 phi ws down
