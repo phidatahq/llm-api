@@ -21,13 +21,11 @@ dependencies = [
   "tiktoken",
   "beautifulsoup4",
   "types-beautifulsoup4",
-  # Formatting
-  "black",
   # Type checking
   "mypy",
   # Testing
   "pytest",
-  # Linting
+  # Linting and Formatting
   "ruff",
   # Phidata
   "phidata==2.0.25",
